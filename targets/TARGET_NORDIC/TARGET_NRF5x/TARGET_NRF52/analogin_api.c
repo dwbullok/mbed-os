@@ -17,6 +17,7 @@
  
 #if DEVICE_ANALOGIN
 
+#include <assert.h>
 #include "hal/analogin_api.h"
 
 #include "pinmap.h"
@@ -45,7 +46,46 @@ void SAADC_IRQHandler(void);
  * @param obj The analogin object to initialize
  * @param pin The analogin pin name
  */
-void analogin_init(analogin_t *obj, PinName pin)
+
+nrf_saadc_reference_t decode_v_ref(uint32_t v_ref) { 
+    switch (v_ref) {
+        case 0x000600u:
+            return NRF_SAADC_REFERENCE_INTERNAL;
+        case 0x010104u:
+            return NRF_SAADC_REFERENCE_VDD4;
+        default:
+            assert(false);
+    }
+}
+
+nrf_saadc_gain_t decode_gain(uint16_t gain) { 
+    switch (gain) {
+        case 0x0106:
+            return NRF_SAADC_GAIN1_6;
+        case 0x0105:
+            return NRF_SAADC_GAIN1_5;
+        case 0x0104:
+            return NRF_SAADC_GAIN1_4;
+        case 0x0103:
+            return NRF_SAADC_GAIN1_3;
+        case 0x0102:
+            return NRF_SAADC_GAIN1_2;
+        case 0x0101:
+            return NRF_SAADC_GAIN1;
+        case 0x0201:
+            return NRF_SAADC_GAIN2;
+        case 0x0401:
+            return NRF_SAADC_GAIN4;
+        default:
+            assert(false);
+    }
+}
+
+
+
+
+
+void analogin_init(analogin_t *obj, PinName pin, uint16_t gain, uint32_t v_ref)
 {
     MBED_ASSERT(obj);
 
@@ -87,12 +127,18 @@ void analogin_init(analogin_t *obj, PinName pin)
     /* Configure channel and pin:
      *  - the 1/4 gain and VDD/4 makes the reference voltage VDD.
      */
+    
+    
+    
+    
+    
+    
     nrf_saadc_channel_config_t channel_config = {
         .resistor_p = NRF_SAADC_RESISTOR_DISABLED,
         .resistor_n = NRF_SAADC_RESISTOR_DISABLED,
-        .gain       = NRF_SAADC_GAIN1_4,
-        .reference  = NRF_SAADC_REFERENCE_VDD4,
-        .acq_time   = NRF_SAADC_ACQTIME_10US,
+        .gain       = decode_gain(gain),
+        .reference  = decode_v_ref(v_ref),
+        .acq_time   = NRF_SAADC_ACQTIME_40US,
         .mode       = NRF_SAADC_MODE_SINGLE_ENDED,
         .burst      = NRF_SAADC_BURST_DISABLED,
         .pin_p      = input,

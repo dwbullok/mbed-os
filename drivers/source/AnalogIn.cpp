@@ -23,10 +23,12 @@ namespace mbed {
 
 SingletonPtr<PlatformMutex> AnalogIn::_mutex;
 
-AnalogIn::AnalogIn(PinName pin)
+AnalogIn::AnalogIn(PinName pin, Gain gain, VRef vRef)
 {
     lock();
-    analogin_init(&_adc, pin);
+    _gain = gain;
+    _v_ref = vRef;
+    analogin_init(&_adc, pin, uint16_t(_gain), uint32_t(_v_ref));
     unlock();
 }
 

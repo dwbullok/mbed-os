@@ -66,12 +66,19 @@ namespace mbed {
 class AnalogIn {
 
 public:
+    enum class Gain {
+        G_1_6 = 0x0106u, G_1_4 = 0x0104u, G_1_3 = 0x0103u, G_1_2 = 0x0102u, G_1 = 0x0101u, G_2 = 0x0201u, G_4 = 0x0401u
+    };
+    enum class VRef {
+        V_0_6 = 0x000600u, VDD_4 = 0x010104u
+    };
+    
 
     /** Create an AnalogIn, connected to the specified pin
      *
      * @param pin AnalogIn pin to connect to
      */
-    AnalogIn(PinName pin);
+    AnalogIn(PinName pin, Gain gain=Gain::G_4, VRef vRef=VRef::VDD_4);
 
     /** Read the input voltage, represented as a float in the range [0.0, 1.0]
      *
@@ -124,6 +131,10 @@ protected:
 
     analogin_t _adc;
     static SingletonPtr<PlatformMutex> _mutex;
+    
+    Gain _gain;
+    VRef _v_ref;
+    
 #endif //!defined(DOXYGEN_ONLY)
 
 };

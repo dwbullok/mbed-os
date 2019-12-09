@@ -7787,6 +7787,15 @@
         "program_cycle_s": 6,
         "bootloader_supported": true
     },
+    "PARTICLE_XENON": {
+        "inherits": ["MCU_NRF52840"],
+        "release_versions": ["5"],
+        "device_name": "nRF52840_xxAA",
+        "platform.stdio-baud-rate": 115200,
+        "macros_add": [
+            "CONFIG_GPIO_AS_PINRESET"
+        ]
+    },
     "NRF52840_DK": {
         "supported_form_factors": ["ARDUINO"],
         "inherits": ["MCU_NRF52840"],

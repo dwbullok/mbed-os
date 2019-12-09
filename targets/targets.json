@@ -7796,6 +7796,18 @@
             "CONFIG_GPIO_AS_PINRESET"
         ]
     },
+    "ADAFRUIT_FEATHER_NRF52": {
+        "inherits": ["MCU_NRF52832"],
+        "release_versions": ["5"],
+        "device_name": "nRF52832_xxAA",
+        "platform.stdio-baud-rate": 115200,
+        "macros_add": [
+            "WSF_MAX_HANDLERS=10"
+        ],
+        "macros_add": [
+                "CONFIG_GPIO_AS_PINRESET"
+        ]
+    },
     "ARDUINO_NANO33BLE": {
         "inherits": ["MCU_NRF52840"],
         "release_versions": ["5"],
